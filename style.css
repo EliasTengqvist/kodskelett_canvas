@@ -1,7 +1,14 @@
-body {
-  margin: 0px;
+#gameCanvas {
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  flex-direction: column;
+  margin: auto;
 }
 
-canvas {
-  border: 2px solid black;
+body {
+  display: flex;
+  background-color: pink;
 }

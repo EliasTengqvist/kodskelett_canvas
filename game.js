@@ -1,89 +1,133 @@
 //  ------------ Setup ------------
 window.focus;
-const SCREENWIDTH = innerWidth;
-const SCREENHEIGHT = innerHeight;
+const SCREENWIDTH = 1000;
+const SCREENHEIGHT = 950;
 let gameCanvas = document.getElementById("gameCanvas");
 let c = gameCanvas.getContext("2d"); // Drawing object
-gameCanvas.height = SCREENHEIGHT / 2;
-gameCanvas.width = SCREENWIDTH / 2;
+gameCanvas.height = SCREENHEIGHT/2;
+gameCanvas.width = SCREENWIDTH/2;
 // -------------------------------------
 // Player variables
-let playerX = 100;
-let playerY = 100;
-let playerWidth = 10;
-let playerHeight = 10;
-let dx = 2;
+let playerX = 300;
+let playerY = 0;
+let playerWidth = 100;
+let playerHeight = 100;
+let dx = 0.5;
 let dy = 2;
-
 let directions = {
   left: false,
   right: false,
   up: false,
   down: false,
 };
+
+
+class lowerObstacle {
+  constructor(x,y,height,width) {
+      this.color = "black"; 
+      this.width = width; 
+      this.height = height; 
+      this.x = x;
+      this.y = y;
+      this.dx = -5;
+      this.dy = 0;
+  }
+
+}
+
+class upperObstacle {
+  constructor(x,y,height,width) {
+    this.color = "black"; 
+    this.width = width; 
+    this.height = height; 
+    this.x = x;
+    this.y = y;
+    this.dx = -5;
+    this.dy = 0;
+}
+}
+
+O1 = new lowerObstacle(500,300,200,50);
+O4 = new upperObstacle(500,-200,300,50);
+O3 = new lowerObstacle(20,30,40,50);
+
+lowerObstacles = [O1, O3]
+upperObstacles = [O4]
+
 // -------------------------------------
 // ------------ Player movement ------------
-document.addEventListener("keydown", (e) => {
+/*document.addEventListener("keydown", (e) => {
   switch (e.key) {
-    case "ArrowLeft":
-      directions.left = true;
-      break;
-    case "ArrowRight":
-      directions.right = true;
-      break;
-    case "ArrowUp":
+    case " ":
       directions.up = true;
       break;
-    case "ArrowDown":
-      directions.down = true;
+  }
+});
+*/
+document.addEventListener("keyup", (e) => {
+  switch (e.key) {
+    case " ":
+      directions.up = false;
       break;
-    default:
-      break;
+
   }
 });
 
-document.addEventListener("keyup", (e) => {
-  switch (e.key) {
-    case "ArrowLeft":
-      directions.left = false;
-      break;
-    case "ArrowRight":
-      directions.right = false;
-      break;
-    case "ArrowUp":
-      directions.up = false;
-      break;
-    case "ArrowDown":
-      directions.down = false;
-      break;
-    default:
-      break;
-  }
-});
-// -------------------------------------
-// ------------ Animation ------------
+function GameOver (){
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+ctx.font = "48px sans-serif";
+ctx.fillStyle = "red";
+ctx.textAlign = "center";
+ctx.fillText("Game Over", 500, 500);
+}
+
+// Animation 
 function animate() {
   requestAnimationFrame(animate); // Run gameloop recursively
   c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); // Clear screen
 
-  c.fillRect(playerX, playerY, playerWidth, playerHeight); // Draw player
+  c.drawImage(bild, playerX, playerY, playerWidth, playerHeight); // Draw player
 
-  if (directions.right) {
-    playerX += dx;
+
+  for (let i = 0; i < upperObstacles.length; i++) {
+    obs = upperObstacles[i];
+    obs.x += obs.dx;
+    c.fillRect(obs.x, obs.y, obs.width, obs.height);
+    // if (obs.x < playerX + playerWidth) {
+    //  break;
+    // }
+    
   }
 
-  if (directions.left) {
-    playerX -= dx;
+  for (let i = 0; i < lowerObstacles.length; i++) {
+    obs = lowerObstacles[i];
+    obs.x += obs.dx;
+    c.fillRect(obs.x, obs.y, obs.width, obs.height);
+    // if (obs.x < playerX + playerWidth) {
+    //  break;
+    // }
+    
   }
 
   if (directions.up) {
-    playerY -= dy;
+    playerY -= 7;
   }
 
-  if (directions.down) {
+ if (playerY+ playerHeight < SCREENHEIGHT/2 + 27) ;{
     playerY += dy;
+    }
+  dy += 0.1
+
+  if (playerY + 23 >= 950){
+    GameOver()
   }
 }
+
+bild = document.createElement("img");
+bild.src = "tomato.png";
+
 // -------------------------------------
 // ------------ Start game ------------
+
 animate();
