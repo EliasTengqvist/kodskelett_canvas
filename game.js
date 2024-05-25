@@ -3,7 +3,7 @@ window.focus;
 const SCREENWIDTH = 1000;
 const SCREENHEIGHT = 950;
 let gameCanvas = document.getElementById("gameCanvas");
-let c = gameCanvas.getContext("2d"); // Drawing object
+let c = gameCanvas.getContext("2d"); 
 gameCanvas.height = SCREENHEIGHT / 2;
 gameCanvas.width = SCREENWIDTH / 2;
 // -------------------------------------
@@ -37,7 +37,6 @@ class lowerObstacle {
     this.passed = false; 
   }
 }
-
 
 class upperObstacle {
   constructor(x, y, height, width) {
@@ -95,11 +94,12 @@ function GameOver() {
   c.textAlign = "center";
   c.fillText("Game Over", gameCanvas.width / 2, gameCanvas.height / 2);
   c.fillText("Press R to Restart", gameCanvas.width / 2, gameCanvas.height / 2 + 60);
+
 }
 
 function restartGame() {
   isGameOver = false;
-  playerX = 100; // Reset player position
+  playerX = 100; 
   playerY = 150;
   dx = 0.5;
   dy = 2;
@@ -119,12 +119,12 @@ function isColliding(player, obstacle) {
 
 function animate() {
   if (!isGameOver) {
-    requestAnimationFrame(animate); // Run gameloop recursively
+    requestAnimationFrame(animate); 
   }
-  c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); // Clear screen
+  c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); 
 
 
-  c.drawImage(bild, playerX, playerY, playerWidth, playerHeight); // Draw player
+  c.drawImage(bild, playerX, playerY, playerWidth, playerHeight); 
 
 
   for (let i = 0; i < upperObstacles.length; i++) {
@@ -136,7 +136,7 @@ function animate() {
     c.fillRect(obs.x, obs.y, obs.width, obs.height);
     if (isColliding({ x: playerX, y: playerY, width: playerWidth, height: playerHeight }, obs)) {
       GameOver();
-      return; // Stop the game loop
+      return; 
     }
   }
 
@@ -150,7 +150,7 @@ function animate() {
     c.fillRect(obs.x, obs.y, obs.width, obs.height);
     if (isColliding({ x: playerX, y: playerY, width: playerWidth, height: playerHeight }, obs)) {
       GameOver();
-      return; // Stop the game loop
+      return; 
     }
   }
 
@@ -164,13 +164,13 @@ function animate() {
   if (playerY + playerHeight < SCREENHEIGHT / 2) {
     playerY += dy;
   } else {
-    GameOver(); // Stop the game if player hits the floor
+    GameOver(); 
     return;
   }
   dy += 0.3;
 
 
-  // Increment score for passing columns
+  
   for (let i = 0; i < lowerObstacles.length; i++) {
     let obs = lowerObstacles[i];
     if (obs.x + obs.width < playerX && !obs.passed) {
@@ -178,8 +178,10 @@ function animate() {
       obs.passed = true;
     }
   }
-
-
+ 
+  c.font = "24px sans-serif";
+  c.fillStyle = "black";
+  c.fillText("Score: " + score, 10, 30);
 }
 
 
@@ -187,11 +189,11 @@ let bild = document.createElement("img");
 bild.src = "tomato.png";
 
 
-// Restart game on 'R' key press
+
 document.addEventListener("keydown", (e) => {
   if (e.key === "r" || e.key === "R") {
     restartGame();
-    animate(); // Restart the game loop
+    animate(); 
   }
 });
 
