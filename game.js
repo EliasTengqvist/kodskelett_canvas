@@ -21,6 +21,8 @@ let directions = {
   down: false,
 };
 
+
+//test//
 class lowerObstacle {
   constructor(x, y, height, width) {
     this.color = "black";
