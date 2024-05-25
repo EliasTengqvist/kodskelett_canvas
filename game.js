@@ -1,4 +1,3 @@
-//  ------------ Setup ------------
 window.focus;
 const SCREENWIDTH = 1000;
 const SCREENHEIGHT = 950;
@@ -6,8 +5,7 @@ let gameCanvas = document.getElementById("gameCanvas");
 let c = gameCanvas.getContext("2d"); 
 gameCanvas.height = SCREENHEIGHT / 2;
 gameCanvas.width = SCREENWIDTH / 2;
-// -------------------------------------
-// Player variables
+
 let playerX = 100; 
 let playerY = 150; 
 let playerWidth = 50; 
@@ -20,7 +18,6 @@ let directions = {
   up: false,
   down: false,
 };
-
 
 let isGameOver = false;
 let score = 0;
@@ -68,9 +65,6 @@ setInterval(function createObstacles() {
 
 }}, 2000);
 
-
-// -------------------------------------
-// ------------ Player movement ------------
 document.addEventListener("keydown", (e) => {
   switch (e.key) {
     case " ":
@@ -123,9 +117,7 @@ function animate() {
   }
   c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); 
 
-
   c.drawImage(bild, playerX, playerY, playerWidth, playerHeight); 
-
 
   for (let i = 0; i < upperObstacles.length; i++) {
     let obs = upperObstacles[i];
@@ -140,7 +132,6 @@ function animate() {
     }
   }
 
-
   for (let i = 0; i < lowerObstacles.length; i++) {
     let obs = lowerObstacles[i];
     if (!isGameOver) {
@@ -148,18 +139,17 @@ function animate() {
     }
     c.fillStyle = obs.color;
     c.fillRect(obs.x, obs.y, obs.width, obs.height);
+    
     if (isColliding({ x: playerX, y: playerY, width: playerWidth, height: playerHeight }, obs)) {
       GameOver();
       return; 
     }
   }
 
-
   if (directions.up) {
     playerY -= 15;
     dy = 0;
   }
-
 
   if (playerY + playerHeight < SCREENHEIGHT / 2) {
     playerY += dy;
@@ -169,8 +159,6 @@ function animate() {
   }
   dy += 0.3;
 
-
-  
   for (let i = 0; i < lowerObstacles.length; i++) {
     let obs = lowerObstacles[i];
     if (obs.x + obs.width < playerX && !obs.passed) {
@@ -184,11 +172,8 @@ function animate() {
   c.fillText("Score: " + score, 10, 30);
 }
 
-
 let bild = document.createElement("img");
 bild.src = "tomato.png";
-
-
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "r" || e.key === "R") {
@@ -196,7 +181,6 @@ document.addEventListener("keydown", (e) => {
     animate(); 
   }
 });
-
 
 // Start game
 animate();
