@@ -60,7 +60,7 @@ let upperObstacles = [O4];
 
 setInterval(function createObstacles() {
   if (!isGameOver) {
-    let gap = 150; 
+    let gap = 50; 
   let rand = Math.random() * 100 + 300;
   let lower = new lowerObstacle(500, rand, 200, 50);
   let upper = new upperObstacle(500, rand - 400 - gap, 250, 50);
@@ -188,21 +188,8 @@ function animate() {
       obs.passed = true;
     }
   }
-<<<<<<< HEAD
-  */
-
-  /*  if (playerX + 100 == lowerObstacle.X and playerY + 100 == lowerObstacle.Y);
-    break
-  if (playerX + 100 == upperObstacle.x and playerY + 100 == upperObstacle.Y)
-    break
-  */
-=======
 
 
-  c.font = "24px sans-serif";
-  c.fillStyle = "black";
-  c.fillText("Score: " + score, 10, 30);
->>>>>>> 50f1900a6d4507d4ac0c91d29d23522081e97115
 }
 
 
