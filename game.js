@@ -1,15 +1,17 @@
-window.focus;
+window.focus();
 const SCREENWIDTH = 1000;
 const SCREENHEIGHT = 950;
 let gameCanvas = document.getElementById("gameCanvas");
 let c = gameCanvas.getContext("2d"); // Drawing object
 gameCanvas.height = SCREENHEIGHT / 2;
 gameCanvas.width = SCREENWIDTH / 2;
+// -------------------------------------
 
-let playerX = 100; 
-let playerY = 150; 
-let playerWidth = 50; 
-let playerHeight = 50; 
+// Player variables
+let playerX = 100;
+let playerY = 150;
+let playerWidth = 50;
+let playerHeight = 50;
 let dx = 0.5;
 let dy = 2;
 let directions = {
@@ -18,6 +20,9 @@ let directions = {
   up: false,
   down: false,
 };
+let lastJumpTime = 0; // Timestamp of the last jump
+const jumpCooldown = 200; // Cooldown time in milliseconds (0.5 seconds)
+const jumpStrength = -7; // Negative velocity to simulate jump
 
 let isGameOver = false;
 let score = 0;
@@ -65,8 +70,7 @@ setInterval(function createObstacles() {
   }
 }, 2000);
 
-
-
+// ------------ Player movement ------------
 document.addEventListener("keydown", (e) => {
   if (e.key === " ") {
     const currentTime = Date.now();
@@ -122,9 +126,9 @@ function animate() {
   if (!isGameOver) {
     requestAnimationFrame(animate); // Run gameloop recursively
   }
-  c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); 
+  c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); // Clear screen
 
-  c.drawImage(bild, playerX, playerY, playerWidth, playerHeight); 
+  c.drawImage(bild, playerX, playerY, playerWidth, playerHeight); // Draw player
 
   for (let i = 0; i < upperObstacles.length; i++) {
     let obs = upperObstacles[i];
@@ -151,17 +155,23 @@ function animate() {
     }
     c.fillStyle = obs.color;
     c.fillRect(obs.x, obs.y, obs.width, obs.height);
-    
-    if (isColliding({ x: playerX, y: playerY, width: playerWidth, height: playerHeight }, obs)) {
+    if (
+      isColliding(
+        { x: playerX, y: playerY, width: playerWidth, height: playerHeight },
+        obs
+      )
+    ) {
       GameOver();
       return; // Stop the game loop
     }
   }
 
-  if (directions.up) {
-    playerY -= 15;
-    dy = 0;
-  }
+  // Remove this block
+  // if (directions.up) {
+  //   playerY -= 15;
+  //   dy = 0;
+  //   directions.up = false; // Reset direction to prevent continuous jumping
+  // }
 
   if (playerY + playerHeight < SCREENHEIGHT / 2) {
     playerY += dy;
@@ -171,6 +181,7 @@ function animate() {
   }
   dy += 0.3; // Gravity effect
 
+  // Increment score for passing columns
   for (let i = 0; i < lowerObstacles.length; i++) {
     let obs = lowerObstacles[i];
     if (obs.x + obs.width < playerX && !obs.passed) {
@@ -178,11 +189,15 @@ function animate() {
       obs.passed = true;
     }
   }
+  c.font = "24px sans-serif";
+  c.fillStyle = "black";
+  c.fillText("Score: " + score, 10, 30);
 }
 
 let bild = document.createElement("img");
 bild.src = "tomato.png";
 
+// Restart game on 'R' key press
 document.addEventListener("keydown", (e) => {
   if (e.key === "r" || e.key === "R") {
     restartGame();
@@ -192,3 +207,4 @@ document.addEventListener("keydown", (e) => {
 
 // Start game
 animate();
+
