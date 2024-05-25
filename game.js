@@ -129,6 +129,12 @@ function animate() {
     GameOver();
   }
   */
+
+  /*  if (playerX + 100 == lowerObstacle.X and playerY + 100 == lowerObstacle.Y);
+    break
+  if (playerX + 100 == upperObstacle.x and playerY + 100 == upperObstacle.Y)
+    break
+  */
 }
 
 bild = document.createElement("img");
