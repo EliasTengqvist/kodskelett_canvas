@@ -52,7 +52,6 @@ class upperObstacle {
   }
 }
 
-
 let O1 = new lowerObstacle(500, 300, 200, 50);
 let O4 = new upperObstacle(500, -200, 300, 50);
 let lowerObstacles = [O1];
@@ -89,15 +88,6 @@ document.addEventListener("keyup", (e) => {
   }
 });
 
-/*function GameOver() {
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-  ctx.font = "48px sans-serif";
-  ctx.fillStyle = "red";
-  ctx.textAlign = "center";
-  ctx.fillText("Game Over", 500, 500);
-}
-*/
 function GameOver() {
   isGameOver = true;
   c.font = "48px sans-serif";
@@ -113,7 +103,7 @@ function restartGame() {
   playerY = 150;
   dx = 0.5;
   dy = 2;
-  lowerObstacles = [new lowerObstacle(500, 300, 200, 50), new lowerObstacle(700, 300, 200, 50)];
+  lowerObstacles = [new lowerObstacle(500, 300, 200, 50)];
   upperObstacles = [new upperObstacle(500, -200, 300, 50)];
   score = 0;
 }
