@@ -3,7 +3,7 @@ window.focus();
 const SCREENWIDTH = 1000;
 const SCREENHEIGHT = 950;
 let gameCanvas = document.getElementById("gameCanvas");
-let c = gameCanvas.getContext("2d"); 
+let c = gameCanvas.getContext("2d"); // Drawing object
 gameCanvas.height = SCREENHEIGHT / 2;
 gameCanvas.width = SCREENWIDTH / 2;
 // -------------------------------------
@@ -61,17 +61,10 @@ let upperObstacles = [O4];
 
 setInterval(function createObstacles() {
   if (!isGameOver) {
-<<<<<<< HEAD
     let gap = 50;
     let rand = Math.random() * 100 + 300;
     let lower = new lowerObstacle(500, rand, 200, 50);
     let upper = new upperObstacle(500, rand - 400 - gap, 250, 50);
-=======
-    let gap = 50; 
-  let rand = Math.random() * 100 + 300;
-  let lower = new lowerObstacle(500, rand, 200, 50);
-  let upper = new upperObstacle(500, rand - 400 - gap, 250, 50);
->>>>>>> ad8551dc99ff1079b8781d2c4fb63d9916166957
 
     lowerObstacles.push(lower);
     upperObstacles.push(upper);
@@ -103,21 +96,16 @@ function GameOver() {
   c.fillStyle = "red";
   c.textAlign = "center";
   c.fillText("Game Over", gameCanvas.width / 2, gameCanvas.height / 2);
-<<<<<<< HEAD
   c.fillText(
     "Press R to Restart",
     gameCanvas.width / 2,
     gameCanvas.height / 2 + 60
   );
-=======
-  c.fillText("Press R to Restart", gameCanvas.width / 2, gameCanvas.height / 2 + 60);
-
->>>>>>> ad8551dc99ff1079b8781d2c4fb63d9916166957
 }
 
 function restartGame() {
   isGameOver = false;
-  playerX = 100; 
+  playerX = 100; // Reset player position
   playerY = 150;
   dx = 0.5;
   dy = 2;
@@ -137,16 +125,11 @@ function isColliding(player, obstacle) {
 
 function animate() {
   if (!isGameOver) {
-    requestAnimationFrame(animate); 
+    requestAnimationFrame(animate); // Run gameloop recursively
   }
-  c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); 
+  c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); // Clear screen
 
-<<<<<<< HEAD
   c.drawImage(bild, playerX, playerY, playerWidth, playerHeight); // Draw player
-=======
-
-  c.drawImage(bild, playerX, playerY, playerWidth, playerHeight); 
->>>>>>> ad8551dc99ff1079b8781d2c4fb63d9916166957
 
   for (let i = 0; i < upperObstacles.length; i++) {
     let obs = upperObstacles[i];
@@ -162,7 +145,7 @@ function animate() {
       )
     ) {
       GameOver();
-      return; 
+      return; // Stop the game loop
     }
   }
 
@@ -180,7 +163,7 @@ function animate() {
       )
     ) {
       GameOver();
-      return; 
+      return; // Stop the game loop
     }
   }
 
@@ -194,12 +177,12 @@ function animate() {
   if (playerY + playerHeight < SCREENHEIGHT / 2) {
     playerY += dy;
   } else {
-    GameOver(); 
+    GameOver(); // Stop the game if player hits the floor
     return;
   }
   dy += 0.3; // Gravity effect
 
-  
+  // Increment score for passing columns
   for (let i = 0; i < lowerObstacles.length; i++) {
     let obs = lowerObstacles[i];
     if (obs.x + obs.width < playerX && !obs.passed) {
@@ -207,28 +190,16 @@ function animate() {
       obs.passed = true;
     }
   }
-<<<<<<< HEAD
-=======
- 
-  c.font = "24px sans-serif";
-  c.fillStyle = "black";
-  c.fillText("Score: " + score, 10, 30);
->>>>>>> ad8551dc99ff1079b8781d2c4fb63d9916166957
 }
 
 let bild = document.createElement("img");
 bild.src = "tomato.png";
 
-<<<<<<< HEAD
 // Restart game on 'R' key press
-=======
-
-
->>>>>>> ad8551dc99ff1079b8781d2c4fb63d9916166957
 document.addEventListener("keydown", (e) => {
   if (e.key === "r" || e.key === "R") {
     restartGame();
-    animate(); 
+    animate(); // Restart the game loop
   }
 });
 
