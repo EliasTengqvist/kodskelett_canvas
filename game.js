@@ -2,7 +2,7 @@ window.focus;
 const SCREENWIDTH = 1000;
 const SCREENHEIGHT = 950;
 let gameCanvas = document.getElementById("gameCanvas");
-let c = gameCanvas.getContext("2d"); 
+let c = gameCanvas.getContext("2d"); // Drawing object
 gameCanvas.height = SCREENHEIGHT / 2;
 gameCanvas.width = SCREENWIDTH / 2;
 
@@ -31,7 +31,7 @@ class lowerObstacle {
     this.y = y;
     this.dx = -5;
     this.dy = 0;
-    this.passed = false; 
+    this.passed = false;
   }
 }
 
@@ -44,7 +44,7 @@ class upperObstacle {
     this.y = y;
     this.dx = -5;
     this.dy = 0;
-    this.passed = false; 
+    this.passed = false;
   }
 }
 
@@ -55,31 +55,35 @@ let upperObstacles = [O4];
 
 setInterval(function createObstacles() {
   if (!isGameOver) {
-    let gap = 50; 
-  let rand = Math.random() * 100 + 300;
-  let lower = new lowerObstacle(500, rand, 200, 50);
-  let upper = new upperObstacle(500, rand - 400 - gap, 250, 50);
+    let gap = 50;
+    let rand = Math.random() * 100 + 300;
+    let lower = new lowerObstacle(500, rand, 200, 50);
+    let upper = new upperObstacle(500, rand - 400 - gap, 250, 50);
 
-  lowerObstacles.push(lower);
-  upperObstacles.push(upper);
+    lowerObstacles.push(lower);
+    upperObstacles.push(upper);
+  }
+}, 2000);
 
-}}, 2000);
+
 
 document.addEventListener("keydown", (e) => {
-  switch (e.key) {
-    case " ":
+  if (e.key === " ") {
+    const currentTime = Date.now();
+    if (currentTime - lastJumpTime > jumpCooldown) {
       directions.up = true;
-      break;
+      lastJumpTime = currentTime; // Update last jump time
+      dy = jumpStrength; // Set dy to simulate jump  <--- Ändring här
+    }
   }
 });
 
-document.addEventListener("keyup", (e) => {
-  switch (e.key) {
-    case " ":
-      directions.up = false;
-      break;
-  }
-});
+// Not necessary to handle 'keyup' for space as jump should occur on 'keydown'
+// document.addEventListener("keyup", (e) => { // <--- Kommenterat bort
+//   if (e.key === " ") {
+//     directions.up = false;
+//   }
+// });
 
 function GameOver() {
   isGameOver = true;
@@ -87,13 +91,16 @@ function GameOver() {
   c.fillStyle = "red";
   c.textAlign = "center";
   c.fillText("Game Over", gameCanvas.width / 2, gameCanvas.height / 2);
-  c.fillText("Press R to Restart", gameCanvas.width / 2, gameCanvas.height / 2 + 60);
-
+  c.fillText(
+    "Press R to Restart",
+    gameCanvas.width / 2,
+    gameCanvas.height / 2 + 60
+  );
 }
 
 function restartGame() {
   isGameOver = false;
-  playerX = 100; 
+  playerX = 100; // Reset player position
   playerY = 150;
   dx = 0.5;
   dy = 2;
@@ -113,7 +120,7 @@ function isColliding(player, obstacle) {
 
 function animate() {
   if (!isGameOver) {
-    requestAnimationFrame(animate); 
+    requestAnimationFrame(animate); // Run gameloop recursively
   }
   c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); 
 
@@ -126,9 +133,14 @@ function animate() {
     }
     c.fillStyle = obs.color;
     c.fillRect(obs.x, obs.y, obs.width, obs.height);
-    if (isColliding({ x: playerX, y: playerY, width: playerWidth, height: playerHeight }, obs)) {
+    if (
+      isColliding(
+        { x: playerX, y: playerY, width: playerWidth, height: playerHeight },
+        obs
+      )
+    ) {
       GameOver();
-      return; 
+      return; // Stop the game loop
     }
   }
 
@@ -142,7 +154,7 @@ function animate() {
     
     if (isColliding({ x: playerX, y: playerY, width: playerWidth, height: playerHeight }, obs)) {
       GameOver();
-      return; 
+      return; // Stop the game loop
     }
   }
 
@@ -154,10 +166,10 @@ function animate() {
   if (playerY + playerHeight < SCREENHEIGHT / 2) {
     playerY += dy;
   } else {
-    GameOver(); 
+    GameOver(); // Stop the game if player hits the floor
     return;
   }
-  dy += 0.3;
+  dy += 0.3; // Gravity effect
 
   for (let i = 0; i < lowerObstacles.length; i++) {
     let obs = lowerObstacles[i];
@@ -166,10 +178,6 @@ function animate() {
       obs.passed = true;
     }
   }
- 
-  c.font = "24px sans-serif";
-  c.fillStyle = "black";
-  c.fillText("Score: " + score, 10, 30);
 }
 
 let bild = document.createElement("img");
@@ -178,7 +186,7 @@ bild.src = "tomato.png";
 document.addEventListener("keydown", (e) => {
   if (e.key === "r" || e.key === "R") {
     restartGame();
-    animate(); 
+    animate(); // Restart the game loop
   }
 });
 
