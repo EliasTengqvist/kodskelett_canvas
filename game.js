@@ -127,53 +127,87 @@ function isColliding(player, obstacle) {
   );
 }
 
-// Animation
 function animate() {
-  requestAnimationFrame(animate); // Run gameloop recursively
+  if (!isGameOver) {
+    requestAnimationFrame(animate); // Run gameloop recursively
+  }
   c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); // Clear screen
+
 
   c.drawImage(bild, playerX, playerY, playerWidth, playerHeight); // Draw player
 
-  console.log(upperObstacles);
+
   for (let i = 0; i < upperObstacles.length; i++) {
-    obs = upperObstacles[i];
-    obs.x += obs.dx;
+    let obs = upperObstacles[i];
+    if (!isGameOver) {
+      obs.x += obs.dx;
+    }
+    c.fillStyle = obs.color;
     c.fillRect(obs.x, obs.y, obs.width, obs.height);
-    // if (obs.x < playerX + playerWidth) {
-    //  break;
-    // }
+    if (isColliding({ x: playerX, y: playerY, width: playerWidth, height: playerHeight }, obs)) {
+      GameOver();
+      return; // Stop the game loop
+    }
   }
 
+
   for (let i = 0; i < lowerObstacles.length; i++) {
-    obs = lowerObstacles[i];
-    obs.x += obs.dx;
+    let obs = lowerObstacles[i];
+    if (!isGameOver) {
+      obs.x += obs.dx;
+    }
+    c.fillStyle = obs.color;
     c.fillRect(obs.x, obs.y, obs.width, obs.height);
-    // if (obs.x < playerX + playerWidth) {
-    //  break;
-    // }
+    if (isColliding({ x: playerX, y: playerY, width: playerWidth, height: playerHeight }, obs)) {
+      GameOver();
+      return; // Stop the game loop
+    }
   }
+
 
   if (directions.up) {
     playerY -= 15;
     dy = 0;
   }
 
-  if (playerY + playerHeight < SCREENHEIGHT / 2 + 27);
-  {
+
+  if (playerY + playerHeight < SCREENHEIGHT / 2) {
     playerY += dy;
+  } else {
+    GameOver(); // Stop the game if player hits the floor
+    return;
   }
   dy += 0.3;
 
-  /*if (playerY + 23 >= 950) {
-    GameOver();
+
+  // Increment score for passing columns
+  for (let i = 0; i < lowerObstacles.length; i++) {
+    let obs = lowerObstacles[i];
+    if (obs.x + obs.width < playerX && !obs.passed) {
+      score++;
+      obs.passed = true;
+    }
   }
-  */
+
+
+  c.font = "24px sans-serif";
+  c.fillStyle = "black";
+  c.fillText("Score: " + score, 10, 30);
 }
 
-bild = document.createElement("img");
+
+let bild = document.createElement("img");
 bild.src = "tomato.png";
 
-// -------------------------------------
-// ------------ Start game ------------
 
+// Restart game on 'R' key press
+document.addEventListener("keydown", (e) => {
+  if (e.key === "r" || e.key === "R") {
+    restartGame();
+    animate(); // Restart the game loop
+  }
+});
+
+
+// Start game
 animate();
