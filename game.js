@@ -72,6 +72,13 @@ class PowerUp {
   }
 }
 
+class PowrUpGrow{
+  cunstructor(x,y,size){
+    this.image = Image();
+    this.image.src
+  }
+}
+
 let O1 = new lowerObstacle(500, 300, 200, 50);
 let O4 = new upperObstacle(500, -200, 300, 50);
 let lowerObstacles = [O1];
