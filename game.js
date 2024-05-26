@@ -2,12 +2,10 @@ window.focus();
 const SCREENWIDTH = 1000;
 const SCREENHEIGHT = 950;
 let gameCanvas = document.getElementById("gameCanvas");
-let c = gameCanvas.getContext("2d"); // Drawing object
+let c = gameCanvas.getContext("2d");
 gameCanvas.height = SCREENHEIGHT / 2;
 gameCanvas.width = SCREENWIDTH / 2;
-// -------------------------------------
 
-// Player variables
 let playerX = 100;
 let playerY = 150;
 let playerWidth = 50;
@@ -20,9 +18,10 @@ let directions = {
   up: false,
   down: false,
 };
-let lastJumpTime = 0; // Timestamp of the last jump
-const jumpCooldown = 200; // Cooldown time in milliseconds (0.5 seconds)
-const jumpStrength = -7; // Negative velocity to simulate jump
+
+let lastJumpTime = 0; 
+const jumpCooldown = 100; 
+const jumpStrength = -7; 
 
 let isGameOver = false;
 let score = 0;
@@ -70,24 +69,17 @@ setInterval(function createObstacles() {
   }
 }, 2000);
 
-// ------------ Player movement ------------
 document.addEventListener("keydown", (e) => {
   if (e.key === " ") {
     const currentTime = Date.now();
     if (currentTime - lastJumpTime > jumpCooldown) {
       directions.up = true;
-      lastJumpTime = currentTime; // Update last jump time
-      dy = jumpStrength; // Set dy to simulate jump  <--- Ändring här
+      lastJumpTime = currentTime; 
+      dy = jumpStrength;
     }
   }
 });
 
-// Not necessary to handle 'keyup' for space as jump should occur on 'keydown'
-// document.addEventListener("keyup", (e) => { // <--- Kommenterat bort
-//   if (e.key === " ") {
-//     directions.up = false;
-//   }
-// });
 
 function GameOver() {
   isGameOver = true;
@@ -104,13 +96,13 @@ function GameOver() {
 
 function restartGame() {
   isGameOver = false;
-  playerX = 100; // Reset player position
+  playerX = 100; 
   playerY = 150;
   dx = 0.5;
   dy = 2;
   lowerObstacles = [new lowerObstacle(500, 300, 200, 50)];
   upperObstacles = [new upperObstacle(500, -200, 300, 50)];
-  score = 0;
+  score = 0; 
 }
 
 function isColliding(player, obstacle) {
@@ -122,13 +114,20 @@ function isColliding(player, obstacle) {
   );
 }
 
+function drawScore() { 
+  c.font = "24px sans-serif";
+  c.fillStyle = "black";
+  c.textAlign = "left";
+  c.fillText("Score: " + score, 10, 30);
+}
+
 function animate() {
   if (!isGameOver) {
-    requestAnimationFrame(animate); // Run gameloop recursively
+    requestAnimationFrame(animate); 
   }
-  c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); // Clear screen
+  c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); 
 
-  c.drawImage(bild, playerX, playerY, playerWidth, playerHeight); // Draw player
+  c.drawImage(bild, playerX, playerY, playerWidth, playerHeight); 
 
   for (let i = 0; i < upperObstacles.length; i++) {
     let obs = upperObstacles[i];
@@ -144,8 +143,8 @@ function animate() {
       )
     ) {
       GameOver();
-      return; // Stop the game loop
-    }
+      return; 
+    
   }
 
   for (let i = 0; i < lowerObstacles.length; i++) {
@@ -162,26 +161,19 @@ function animate() {
       )
     ) {
       GameOver();
-      return; // Stop the game loop
+      return; 
     }
   }
-
-  // Remove this block
-  // if (directions.up) {
-  //   playerY -= 15;
-  //   dy = 0;
-  //   directions.up = false; // Reset direction to prevent continuous jumping
-  // }
 
   if (playerY + playerHeight < SCREENHEIGHT / 2) {
     playerY += dy;
   } else {
-    GameOver(); // Stop the game if player hits the floor
+    GameOver(); 
     return;
   }
-  dy += 0.3; // Gravity effect
+  dy += 0.4; 
 
-  // Increment score for passing columns
+  
   for (let i = 0; i < lowerObstacles.length; i++) {
     let obs = lowerObstacles[i];
     if (obs.x + obs.width < playerX && !obs.passed) {
@@ -189,22 +181,20 @@ function animate() {
       obs.passed = true;
     }
   }
-  c.font = "24px sans-serif";
-  c.fillStyle = "black";
-  c.fillText("Score: " + score, 10, 30);
-}
+
+  drawScore(); 
+}}
 
 let bild = document.createElement("img");
 bild.src = "tomato.png";
 
-// Restart game on 'R' key press
+
 document.addEventListener("keydown", (e) => {
   if (e.key === "r" || e.key === "R") {
     restartGame();
-    animate(); // Restart the game loop
+    animate(); 
   }
 });
 
-// Start game
-animate();
 
+animate();
