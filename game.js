@@ -169,7 +169,7 @@ setInterval(function createPowerUpGrows() {
     let powerUpGrow = new PowerUpGrow(500, randY, size); 
     powerUpGrows.push(powerUpGrow);
   }
-}, 9500);
+}, 11500);
 
 document.addEventListener("keydown", (e) => {
   if (e.key === " ") {
@@ -189,13 +189,23 @@ function GameOver() {
   c.textAlign = "center";
   c.fillText("Game Over", gameCanvas.width / 2, gameCanvas.height / 2);
   c.fillText(
-    "Press R to Restart",
+    "Press R in 5s to Restart",
     gameCanvas.width / 2,
     gameCanvas.height / 2 + 60
   );
 }
 
+let lastRestartTime = 0;
+const restartCooldown = 5000; 
+
 function restartGame() {
+  const currentTime = Date.now();
+  if (currentTime - lastRestartTime < restartCooldown) {
+   
+    return;
+  }
+
+  lastRestartTime = currentTime; 
   isGameOver = false;
   playerX = 100;
   playerY = 150;
