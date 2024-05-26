@@ -19,7 +19,6 @@ let directions = {
   down: false,
 };
 
-
 let lastJumpTime = 0;
 const jumpCooldown = 100;
 const jumpStrength = -7;
@@ -31,12 +30,12 @@ let isInvincible = false;
 const invincibilityDuration = 5000;
 
 function updateHighScore() {
-  highScore = Math.max(score, highScore); // Update high score if current score is higher
-  document.getElementById("highScoreValue").textContent = highScore; // Update high score display
+  highScore = Math.max(score, highScore);
+  document.getElementById("highScoreValue").textContent = highScore;
 }
 
 class lowerObstacle {
-  constructor(x, y,height, width) {
+  constructor(x, y, height, width) {
     this.color = "black";
     this.width = width;
     this.height = height;
@@ -72,11 +71,14 @@ class PowerUp {
   }
 }
 
-class PowerUpGrow{
-  cunstructor(x,y,size){
-    this.image = Image();
-    this.image.src= "bilder/skalle.png"
+class PowerUpGrow {
+  constructor(x, y, size) { 
+    this.image = new Image();
+    this.image.src = "bilder/skalle.png";
     this.size = size;
+    this.x = x;
+    this.y = y;
+    this.dx = -5;
   }
 }
 
@@ -135,6 +137,42 @@ setInterval(function createPowerUps() {
   }
 }, 20000);
 
+setInterval(function createPowerUpGrows() {
+  if (!isGameOver) {
+    let size = 30;
+    let randY;
+    let validLocation = false;
+
+    while (!validLocation) {
+      randY = Math.random() * (SCREENHEIGHT / 2 - size);
+      validLocation = true;
+
+      for (let obs of lowerObstacles) {
+        if (
+          randY < obs.y + obs.height &&
+          randY + size > obs.y
+        ) {
+          validLocation = false;
+          break;
+        }
+      }
+
+      for (let obs of upperObstacles) {
+        if (
+          randY < obs.y + obs.height &&
+          randY + size > obs.y
+        ) {
+          validLocation = false;
+          break;
+        }
+      }
+    }
+
+    let powerUpGrow = new PowerUpGrow(500, randY, size); 
+    powerUpGrows.push(powerUpGrow);
+  }
+}, 10500);
+
 document.addEventListener("keydown", (e) => {
   if (e.key === " ") {
     const currentTime = Date.now();
@@ -190,6 +228,15 @@ function isCollidingWithPowerUp(player, powerUp) {
   );
 }
 
+function isCollidingWithPowerUpGrow(player, powerUpGrow) {
+  return (
+    player.x < powerUpGrow.x + powerUpGrow.size &&
+    player.x + player.width > powerUpGrow.x &&
+    player.y < powerUpGrow.y + powerUpGrow.size &&
+    player.y + player.height > powerUpGrow.y
+  );
+}
+
 function activatePowerUp() {
   isInvincible = true;
   setTimeout(() => {
@@ -197,12 +244,20 @@ function activatePowerUp() {
   }, invincibilityDuration);
 }
 
+function activatePowerUpGrow() {
+  playerWidth += 30; 
+  playerHeight += 30; 
+  setTimeout(() => {
+    playerWidth -= 30; 
+    playerHeight -= 30; 
+  }, invincibilityDuration);
+}
+
 function drawScore() {
   c.font = "24px sans-serif";
   c.fillStyle = "black";
   c.textAlign = "left";
-  c.fillText("Score: "
-  + score, 10, 30);
+  c.fillText("Score: " + score, 10, 30);
 }
 
 function animate() {
@@ -255,6 +310,18 @@ function animate() {
     }
   }
 
+  for (let i = 0; i < powerUpGrows.length; i++) {
+    let powerUpGrow = powerUpGrows[i];
+    if (!isGameOver) {
+      powerUpGrow.x += powerUpGrow.dx;
+    }
+    c.drawImage(powerUpGrow.image, powerUpGrow.x, powerUpGrow.y, powerUpGrow.size, powerUpGrow.size);
+    if (isCollidingWithPowerUpGrow({ x: playerX, y: playerY, width: playerWidth, height: playerHeight }, powerUpGrow)) {
+      powerUpGrows.splice(i, 1);
+      activatePowerUpGrow();
+    }
+  }
+
   if (playerY + playerHeight < SCREENHEIGHT / 2) {
     playerY += dy;
   } else {
@@ -288,3 +355,5 @@ let invincibleTomatoImage = new Image();
 invincibleTomatoImage.src = "bilder/Tomato(2).png";
 
 animate();
+
+
