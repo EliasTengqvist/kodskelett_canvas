@@ -82,8 +82,6 @@ class PowerUpGrow {
   }
 }
 
-new lowerObstacle(500, 300, 200, 50);
-new upperObstacle(500, -200, 300, 50);
 let lowerObstacles = [];
 let upperObstacles = [];
 let powerUps = [];
@@ -203,8 +201,8 @@ function restartGame() {
   playerY = 150;
   dx = 0.5;
   dy = 2;
-  lowerObstacles = [new lowerObstacle(500, 300, 200, 50)];
-  upperObstacles = [new upperObstacle(500, -200, 300, 50)];
+  lowerObstacles = [];
+  upperObstacles = [];
   powerUps = [];
   score = 0;
   isInvincible = false;
@@ -355,5 +353,3 @@ let invincibleTomatoImage = new Image();
 invincibleTomatoImage.src = "bilder/Tomato(2).png";
 
 animate();
-
-
