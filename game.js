@@ -82,10 +82,10 @@ class PowerUpGrow {
   }
 }
 
-let O1 = new lowerObstacle(500, 300, 200, 50);
-let O4 = new upperObstacle(500, -200, 300, 50);
-let lowerObstacles = [O1];
-let upperObstacles = [O4];
+new lowerObstacle(500, 300, 200, 50);
+new upperObstacle(500, -200, 300, 50);
+let lowerObstacles = [];
+let upperObstacles = [];
 let powerUps = [];
 let powerUpGrows = [];
 
@@ -135,7 +135,7 @@ setInterval(function createPowerUps() {
     let powerUp = new PowerUp(500, randY, size);
     powerUps.push(powerUp);
   }
-}, 20000);
+}, 25000);
 
 setInterval(function createPowerUpGrows() {
   if (!isGameOver) {
@@ -171,7 +171,7 @@ setInterval(function createPowerUpGrows() {
     let powerUpGrow = new PowerUpGrow(500, randY, size); 
     powerUpGrows.push(powerUpGrow);
   }
-}, 10500);
+}, 9500);
 
 document.addEventListener("keydown", (e) => {
   if (e.key === " ") {
