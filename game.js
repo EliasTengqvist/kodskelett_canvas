@@ -72,10 +72,10 @@ class PowerUp {
   }
 }
 
-class PowrUpGrow{
+class PowerUpGrow{
   cunstructor(x,y,size){
     this.image = Image();
-    this.image.src
+    this.image.src= "bilder/skalle.png"
   }
 }
 
