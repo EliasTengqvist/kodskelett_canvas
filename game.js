@@ -124,7 +124,7 @@ setInterval(function createPowerUps() {
     let powerUp = new PowerUp(500, randY, size);
     powerUps.push(powerUp);
   }
-}, 15000);
+}, 20000);
 
 document.addEventListener("keydown", (e) => {
   if (e.key === " ") {
