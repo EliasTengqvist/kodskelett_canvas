@@ -65,7 +65,7 @@ class PowerUp {
   constructor(x, y, size) {
     this.image = new Image();
     this.image.src = "bilder/Powerupp(1).png";
-    this.size=size;
+    this.size = size;
     this.x = x;
     this.y = y;
     this.dx = -5;
@@ -76,6 +76,7 @@ class PowerUpGrow{
   cunstructor(x,y,size){
     this.image = Image();
     this.image.src= "bilder/skalle.png"
+    this.size = size;
   }
 }
 
@@ -84,6 +85,7 @@ let O4 = new upperObstacle(500, -200, 300, 50);
 let lowerObstacles = [O1];
 let upperObstacles = [O4];
 let powerUps = [];
+let powerUpGrows = [];
 
 setInterval(function createObstacles() {
   if (!isGameOver) {
