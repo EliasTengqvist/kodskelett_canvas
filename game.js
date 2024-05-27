@@ -89,7 +89,7 @@ let powerUpGrows = [];
 
 setInterval(function createObstacles() {
   if (!isGameOver) {
-    let gap = 50;
+    let gap = 30;
     let rand = Math.random() * 100 + 300;
     let lower = new lowerObstacle(500, rand, 200, 50);
     let upper = new upperObstacle(500, rand - 400 - gap, 250, 50);
